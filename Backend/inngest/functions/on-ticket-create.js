@@ -29,7 +29,7 @@ export const onTicketCreated = inngest.createFunction(
 
        const aiResponse = await analyzeTicket(ticket);
 
-       const relatedSkills = await step.run("ai-processing", async () => {
+       const relatedSkills = await step.run("ai-processing", async () => { 
             let skills = []
             if (aiResponse) {
                await Ticket.findByIdAndUpdate(ticketId, {

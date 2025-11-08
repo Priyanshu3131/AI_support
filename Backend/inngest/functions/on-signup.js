@@ -8,7 +8,7 @@ export const onSignup = inngest.createFunction(
   { event: "user/signup" },
   async ({ event, step }) => {
     try{
-        const {email} = event.data;
+        const {email} = event.data; 
          const user = await step.run("get-user-email", async () => {   // check MongoDB for user with that email.
             const userObject = await User.findOne({ email });  
             if (!userObject) {
@@ -24,7 +24,7 @@ export const onSignup = inngest.createFunction(
 
             console.log(`User signed up: ${user.name} (${user.email})`);
         })
-
+        
         return {success:true}
     } catch (error) {
         console.error(`❌ Error fetching user: ${error.message}`);

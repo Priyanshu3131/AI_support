@@ -53,7 +53,7 @@ const Header = () => {
                 <path d="M16 11h.01" />
                 <path d="M16 16h.01" />
               </svg>
-              SmartTicket-AI
+              Support Flow
             </Link>
             <div className="hidden md:block">
               <div className="ml-10 flex items-baseline space-x-4">

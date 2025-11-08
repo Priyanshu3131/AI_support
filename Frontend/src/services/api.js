@@ -30,7 +30,7 @@ const fetchWithAuth = async (url, options = {}) => {
     const errorData = await response.json().catch(() => ({ message: 'An unknown error occurred' }));
     throw new Error(errorData.message || 'API request failed');
   }
-
+  
   return response;
 };
 
@@ -86,7 +86,9 @@ export const api = {
       method: 'POST',
       body: JSON.stringify(data),
     });
-    return response.json();
+    //return response.json();
+    const resData = await response.json();
+    return resData.user;
   },
 
   updateTicket: async (id, data) => {
