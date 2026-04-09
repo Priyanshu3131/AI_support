@@ -4,7 +4,7 @@ const analyzeTicket = async (ticket) => {
   const supportAgent = createAgent({
     model: gemini({
       // model: "gemini-1.5-flash-8b",
-      model: "gemini-2.0-flash",
+      model: "gemini-2.5-flash-lite",
       apiKey: process.env.GEMINI_API_KEY,
     }),
     name: "AI Ticket Triage Assistant",
@@ -73,7 +73,11 @@ Ticket information:
     let cleanedResponse = String(raw).trim();
 
     // First, try to extract JSON from markdown code blocks (fallback)
-    const markdownMatch = cleanedResponse.match(/``````/i);
+    // const markdownMatch = cleanedResponse.match(/``````/i);
+    // if (markdownMatch) {
+    //   cleanedResponse = markdownMatch[1].trim();
+    // }
+    const markdownMatch = cleanedResponse.match(/```json\s*([\s\S]*?)\s*```/i);
     if (markdownMatch) {
       cleanedResponse = markdownMatch[1].trim();
     }
@@ -96,6 +100,7 @@ Ticket information:
     }
 
     // Validate priority value
+    parsedResult.priority = parsedResult.priority?.toUpperCase();
     const validPriorities = ['LOW', 'MEDIUM', 'HIGH'];
     if (!validPriorities.includes(parsedResult.priority)) {
       console.warn(`Invalid priority "${parsedResult.priority}". Setting to "medium".`);

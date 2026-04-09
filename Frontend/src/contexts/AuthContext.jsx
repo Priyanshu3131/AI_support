@@ -11,22 +11,21 @@ export const AuthProvider = ({ children }) => {
   const [isLoading, setIsLoading] = useState(true);
 
   const fetchUserProfile = useCallback(async () => {
-    if (localStorage.getItem('authToken')) {
-      try {
-        const storedUser = localStorage.getItem('user');
-        if (storedUser) {
-          setUser(JSON.parse(storedUser));
-        } else {
-          // later this can use api.get('/profile') or similar
-          logout();
-        }
-      } catch (error) {
-        console.error('Failed to fetch user profile, logging out.', error);
-        logout();
-      } finally {
+    try {
+      if (localStorage.getItem('authToken')) {
+        // Validate token by calling the profile endpoint
+        const response = await api.getProfile();
+        setUser(response.user);
+        setIsLoading(false);
+      } else {
         setIsLoading(false);
       }
-    } else {
+    } catch (error) {
+      // Token expired or invalid - clear storage and logout
+      localStorage.removeItem('authToken');
+      localStorage.removeItem('user');
+      setToken(null);
+      setUser(null);
       setIsLoading(false);
     }
   }, []);

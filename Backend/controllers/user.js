@@ -103,7 +103,6 @@ export const logout = async (req, res) => {
 
             res.status(200).json({ message: "Logged out successfully" });
         })
- 
   } 
   catch (error) {
     console.error("Error logging out:", error);
@@ -156,6 +155,23 @@ export const getUsers = async (req, res) => {
   } 
   catch (error) {
     console.error("Error fetching users:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+export const getProfile = async (req, res) => {
+  try {
+    if (!req.user) {
+      return res.status(401).json({ message: "Unauthorized" });
+    }
+
+    const userObj = req.user.toObject ? req.user.toObject() : req.user;
+    delete userObj.password;
+
+    res.status(200).json({ user: userObj });
+  } 
+  catch (error) {
+    console.error("Error fetching profile:", error);
     res.status(500).json({ message: "Internal server error" });
   }
 };
